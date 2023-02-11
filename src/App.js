@@ -1,25 +1,56 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
 
-function App() {
+function ToDoApp() {
+  const [task, setTask] = useState("");
+  const [tasks, setTasks] = useState([]);
+
+  const handleChange = (e) => {
+    setTask(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (task !== "") {
+    setTasks([...tasks, task]);
+    setTask("");
+    }
+    };
+
+  const handleDelete = (index) => {
+    const newTasks = [...tasks];
+    newTasks.splice(index, 1);
+    setTasks(newTasks);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ textAlign: "center", margin: "100px", marginLeft: "150px", marginRight: "150px"}}>
+      <h1>To Do App</h1>
+      <div style={{ textAlign: "center", marginLeft: "200px", marginRight: "200px", borderStyle: "solid", borderColor: "grey" }}>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="What needs to be done?"
+          value={task}
+          onChange={handleChange}
+          style={{display: "flex", justifyContent: "space-between", padding: "10px", width: "575px", border: "none", borderBottom: "solid", borderColor: "grey"}}
+        />
+      </form>
+      <div>
+        {tasks.length > 0 ? (
+          tasks.map((t, index) => (
+            <div key={index} style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px solid black", padding: "10px" }}>
+              <p>{t}</p>
+              <button style={{padding: "5px", border: "none"}} onClick={() => handleDelete(index)}>X</button>
+            </div>
+          ))
+        ) : (
+          <p style={{border: "solid", borderColor: "grey", background: "blue"}}><strong>No tasks, add a task</strong></p>
+        )}
+      </div>
+      <p style={{display: "flex", justifyContent:"flex-start", fontSize:" 10px", marginLeft:"3px"}}>{tasks.length} item{tasks.length === 1 ? "" : "s"} left</p>
+    </div>
     </div>
   );
 }
 
-export default App;
+export default ToDoApp;
